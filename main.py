@@ -308,7 +308,6 @@ async def main(args):
                         )
                         result.markdown = content
 
-                    # Add metadata
                     result._crawl_metadata = {
                         "url": args.url,
                         "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
@@ -324,7 +323,7 @@ async def main(args):
                 end_time = time.time()
 
             if not args.quiet:
-                print()  # New line after progress
+                print()
                 word_count = sum(
                     len(result.markdown.split()) for result in collected_results
                 )
