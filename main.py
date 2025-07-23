@@ -30,19 +30,17 @@ def create_parser() -> argparse.ArgumentParser:
         "Built on crawl4ai with smart defaults for documentation sites.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-Examples:
-  deep-crawl https://docs.stripe.com
-  deep-crawl https://docs.react.dev --format json
-  deep-crawl https://api.example.com --sections "reference,guides" --auth-header "Bearer token"
-  deep-crawl https://docs.python.org --exclude-sections "download,community"
-  deep-crawl https://internal-docs.com --cookies "session=abc123"
+            Examples:
+            deep-crawl https://docs.stripe.com
+            deep-crawl https://docs.react.dev --format json
+            deep-crawl https://api.example.com --sections "reference,guides" --auth-header "Bearer token"
+            deep-crawl https://docs.python.org --exclude-sections "download,community"
+            deep-crawl https://internal-docs.com --cookies "session=abc123"
         """,
     )
 
-    # Required arguments
     parser.add_argument("url", help="URL to crawl")
 
-    # Output options
     output_group = parser.add_argument_group("Output Options")
     output_group.add_argument(
         "-o", "--output", help="Output file path (default: auto-generated from URL)"
@@ -62,7 +60,6 @@ Examples:
         help="Maximum pages to crawl (default: 30)",
     )
 
-    # Content filtering
     filter_group = parser.add_argument_group("Content Filtering")
     filter_group.add_argument(
         "--sections",
@@ -88,7 +85,6 @@ Examples:
         help="Additional CSS selectors to exclude (comma-separated)",
     )
 
-    # Authentication
     auth_group = parser.add_argument_group("Authentication")
     auth_group.add_argument(
         "--auth-header",
@@ -167,8 +163,7 @@ def parse_cookies(cookies_str: Optional[str]) -> Optional[List[Dict[str, Any]]]:
     """Parse cookies from string or file."""
     if not cookies_str:
         return None
-
-    # Check if it's a file path
+ 
     if Path(cookies_str).exists():
         try:
             with open(cookies_str, "r") as f:
@@ -177,7 +172,6 @@ def parse_cookies(cookies_str: Optional[str]) -> Optional[List[Dict[str, Any]]]:
             print(f"Warning: Could not parse cookie file {cookies_str}")
             return None
 
-    # Parse as cookie string (simplified)
     cookies = []
     for cookie in cookies_str.split(";"):
         if "=" in cookie:
@@ -242,7 +236,6 @@ async def main(args):
         print("Please install with: uv tool install deep-crawl")
         sys.exit(1)
 
-    # Set up browser configuration
     headers = {}
     if args.auth_header:
         auth_headers = parse_auth_header(args.auth_header)
@@ -251,7 +244,6 @@ async def main(args):
 
     cookies = parse_cookies(args.cookies)
 
-    # Only pass user_agent if one was provided to avoid None issues
     browser_kwargs = {
         "headless": True,
         "cookies": cookies,
@@ -263,18 +255,15 @@ async def main(args):
 
     browser_config = BrowserConfig(**browser_kwargs)
 
-    # Set up content filtering
     content_filter = PruningContentFilter(
         min_word_threshold=args.word_threshold,
         threshold_type="word_count",
     )
 
-    # Create markdown generator with filtering
     markdown_generator = DefaultMarkdownGenerator(
         content_filter=content_filter,
     )
 
-    # Set up crawler config
     config = CrawlerRunConfig(
         deep_crawl_strategy=BFSDeepCrawlStrategy(
             max_depth=args.max_depth,
@@ -287,7 +276,7 @@ async def main(args):
         wait_until="networkidle",
         wait_for=args.wait_for,
         verbose=args.verbose,
-        page_timeout=args.timeout * 1000,  # Convert to milliseconds
+        page_timeout=args.timeout * 1000,
         scraping_strategy=LXMLWebScrapingStrategy(),
     )
 
@@ -377,9 +366,6 @@ def filter_sections(
     """Filter content based on section includes/excludes."""
     if not content:
         return content
-
-    # Simple section filtering based on headers
-    # This is a basic implementation - could be enhanced with more sophisticated parsing
 
     lines = content.split("\n")
     filtered_lines = []
