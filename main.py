@@ -229,7 +229,7 @@ def format_results(results: list[Any], include_metadata: bool = True) -> str:
 
 
 async def main(args):
-    """Main crawling function."""
+    """Main crawling function."""    
     try:
         from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig, CacheMode
         from crawl4ai.content_filter_strategy import PruningContentFilter

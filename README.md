@@ -6,7 +6,6 @@ Built on [crawl4ai](https://github.com/unclecode/crawl4ai) with smart defaults f
 
 ## ✨ Features
 
-- **Zero-dependency installation** - Works without Python setup via `uv tool install`
 - **Smart defaults** - Just provide a URL and get clean LLM-ready content
 - **Deep crawling** - Multi-page crawling with configurable depth and page limits
 - **Token counting** - Built-in OpenAI token counting with tiktoken
@@ -19,7 +18,23 @@ Built on [crawl4ai](https://github.com/unclecode/crawl4ai) with smart defaults f
 
 ## 🚀 Installation
 
-### Option 1: Zero-dependency install (Recommended)
+### Prerequisites
+
+- Python 3.11+
+- uv
+- Playwright
+
+#### Installing `playwright` cli
+
+```bash
+npm install -g playwright
+playwright install
+```
+
+[Playwright Installation Guide](https://playwright.dev/docs/intro#installing-playwright)
+
+
+### Option 1: Install with uv
 
 ```bash
 # Install using uv (handles all dependencies automatically)
@@ -27,6 +42,8 @@ uv tool install git+https://github.com/ASRagab/deep-crawl.git
 
 # Or if published to PyPI
 uv tool install deep-crawl
+
+
 ```
 
 This creates an isolated environment and gives you a `deep-crawl` command that works regardless of your local Python setup.
